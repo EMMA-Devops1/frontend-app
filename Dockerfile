@@ -11,7 +11,6 @@ COPY package*.json ./
 RUN npm install && npm audit fix --force && npm install -g npm@9.1.2
 # If you are building your code for production
 # RUN npm ci --only=production
-
 # Bundle app source
 COPY . .
 
