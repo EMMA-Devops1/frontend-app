@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  frontend-app
+  namespace: ms
+  labels:
+    app:  frontend-app
+spec:
+  selector:
+    matchLabels:
+      app: frontend-app
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  frontend-app
+    spec:
+      # initContainers:
+        # Init containers are exactly like regular containers, except:
+          # - Init containers always run to completion.
+          # - Each init container must complete successfully before the next one starts.
+      containers:
+      - name:  frontend-app
+        image:  emmadevops02/frontend-app
+        ports:
+        - containerPort:  3000
+          name:  frontend-app
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-app
+spec:
+  selector:
+    app.kubernetes.io/name: frontend-app
+  ports:
+    protocol: TCP
+    port: 80
+    targetPort: frontend-app-svc
